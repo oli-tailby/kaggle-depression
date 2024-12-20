@@ -13,21 +13,26 @@ import pickle
 
 FEATURES = [
     'Age',
-    'Marital Status',
+    # 'Marital Status',
     'Education Level',
-    'Number of Children',
-    'Smoking Status', 
-    'Physical Activity Level',
+    # 'Number of Children',
+    # 'Income',
+    # 'Smoking Status', 
+    # 'Physical Activity Level',
     'Employment Status',
     'Alcohol Consumption',
     'Dietary Habits',
     'Sleep Patterns',
-    'History of Substance Abuse',
-    'Family History of Depression',
-    'Chronic Medical Conditions',
-    'Income'
+    # 'History of Substance Abuse',
+    # 'Family History of Depression',
+    # 'Chronic Medical Conditions',
     # 'Has Children Flag',
-    # 'Income Square Root'
+    'Income Square Root', 
+    # 'Divorced_Children',
+    # 'Widowed_Children', 
+    'Unhealthy_Lifestyle_All',
+    'Unhealthy_Lifestyle_Sum', 
+    'Unemployed_ChronicCondition'    
 ]
 
 TARGET = 'History of Mental Illness'
@@ -35,7 +40,6 @@ TARGET = 'History of Mental Illness'
 def import_prep_data(path):
 
     print("Loading Data")
-    path = './resources/inference_data.csv'
     df_raw = load_dataframe(path)
     df = prepare_depression_data(df_raw)
     print(df.head())
@@ -107,7 +111,7 @@ def main():
     }
 
     search = GridSearchCV(
-        estimator=pipe,
+        estimator = pipe,
         param_grid = params,
         scoring = 'roc_auc',
         cv = 2
@@ -120,7 +124,7 @@ def main():
     mlflow.log_metric('Test Score', search.score(X_test, y_test))
 
     cv_res = pd.DataFrame(search.cv_results_)
-    cv_res.to_csv('./resources/cv_results.csv', ignore_index=True)
+    cv_res.to_csv('./resources/cv_results.csv', index=False)
     mlflow.log_artifact('./resources/cv_results.csv')
 
     # save the best performing model
@@ -129,15 +133,13 @@ def main():
         pickle.dump(best_model, f)
 
     # run inference on the test set for model evaluation
-    threshold = 0.35
+    threshold = 0.3
     y_prob = best_model.predict_proba(X_test)[:,1]
     y_pred = (y_prob >= threshold).astype('int')
 
-    try:
-        imp_df = feat_importance(search)
-        plot_importance(imp_df)
-    except:
-        print('feature importance plots failed')
+    imp_df = feat_importance(pd.get_dummies(df[FEATURES]).columns, best_model.named_steps['model'])
+    imp_df.to_csv('./resources/feature_importance.csv', index=False)
+    plot_importance(imp_df)
 
     print(model_scores(y_test, y_pred))
     roc_auc_plot(y_test, y_prob)

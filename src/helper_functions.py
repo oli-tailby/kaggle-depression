@@ -31,15 +31,12 @@ def data_split(df: pd.DataFrame,
     return train_test_split(X, y, test_size=test_size)
 
 
-def feat_importance(model):
+def feat_importance(features, model):
 
-    feat_imp = model.named_steps['model'].feature_importances_
-    feat_names = model.named_steps['preprocessor'].get_feature_names_out()
-
-    importance_df = pd.DataFrame({
-        'feature': feat_names,
-        'importance': feat_imp
-    }).sort_values(by='importance', ascending=False)
+    importance_df = pd.DataFrame({'Feature':features,
+              'Coefficient':model.coef_[0],
+              'Abs Coefficient':abs(model.coef_[0])
+    }).sort_values(by='Abs Coefficient', ascending=False)   
 
     return importance_df
 
@@ -52,15 +49,15 @@ def plot_importance(importance_df, path='./resources/feature_importance.png'):
     ax.set_title('Feature Importance')
     sns.barplot(
         ax=ax,
-        x='importance',
-        y='feature',
+        x='Coefficient',
+        y='Feature',
         data=top_importance_df
     )
 
-    ax.set_xlabel('Importance')
+    ax.set_xlabel('Coefficient')
     ax.set_ylabel("Feature")
 
-    fig.savefig(path)
+    fig.savefig(path, bbox_inches="tight")
     mlflow.log_artifact(path)
 
 

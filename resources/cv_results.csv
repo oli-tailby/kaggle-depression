@@ -1,2 +1,2 @@
-,mean_fit_time,std_fit_time,mean_score_time,std_score_time,param_model__penalty,params,split0_test_score,split1_test_score,mean_test_score,std_test_score,rank_test_score
-0,1.0390995740890503,0.09404146671295166,0.7821784019470215,0.10401344299316406,l2,{'model__penalty': 'l2'},0.5945707468805759,0.5954739842803636,0.5950223655804697,0.00045161869989385206,1
+mean_fit_time,std_fit_time,mean_score_time,std_score_time,param_model__penalty,params,split0_test_score,split1_test_score,mean_test_score,std_test_score,rank_test_score
+0.6190309524536133,0.007078886032104492,0.37882959842681885,0.05049455165863037,l2,{'model__penalty': 'l2'},0.5960189372493723,0.594521470489687,0.5952702038695297,0.0007487333798426588,1

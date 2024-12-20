@@ -7,7 +7,6 @@ import pickle
 def import_prep_data(path):
 
     print("Loading Data")
-    path = './resources/inference_data.csv'
     df_raw = load_dataframe(path)
     df = prepare_depression_data(df_raw)
     print(df.head())
@@ -46,7 +45,7 @@ def main():
         })
     ], axis=1)
 
-    y_pred_df.to_csv('./resources/output_inference.csv', ignore_index=True)
+    y_pred_df.to_csv('./resources/output_inference.csv', index=False)
 
 
 if __name__ == '__main__':
