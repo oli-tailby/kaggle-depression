@@ -39,19 +39,19 @@ For many of the features provided, there is a little correlation to the target, 
 ## Modelling Approach and Feature Selection
 I have chosen to tackle this problem with a Logistic Regression, as initial testing of alternative more complex approaches including tree-based models and a basic neural network did not show any improvement in accuracy (see `depression-model.ipynb`) so maintaining a simpler model is beneficial for explainability and processing speed.
 
-Features for the Logistic Regression are chosen based on correlation to the target, and low cross-correlation with other features. I have removed features with especially low correlation to the target, as this set of reduced features makes the model simpler and does not appear to negatively impact performance.
+Features for the Logistic Regression are chosen based on correlation to the target, and low cross-correlation with other features to avoid problems with multicolinearity. I have removed features with especially low correlation to the target, as this set of reduced features makes the model simpler and does not appear to negatively impact performance.
 
-I have also developed a few additional features beyond those immediately available in the source data. These include transformations of existing features and interaction features combining multiple other features, based on speculation as to possible important factors. 
+I have also developed a few additional features beyond those immediately available in the source data. These include transformations of existing features and interaction features combining multiple other features, based on speculation as to possible important factors. The new interaction-based features show some correlation to the target and be included in the modelling, but are not as strong as some of the most relevant pre-existing variables such as Income and Employment. 
 
 
 ## Deployable Code and Testing
-Whilst data exploration, visualisation and testing of modelling approaches is visible in the notebook, I have refactored the code that is ultimately required for the solution into python scripts in `src`. These are split into two scipts:
+Whilst data exploration, visualisation and testing of modelling approaches is visible in the notebook, I have refactored the code that is ultimately required for the solution into python scripts in `src`. These are split into two top-level scripts:
 - **Training and Evaluation**: Based on the learnings of the exploratory analysis and modelling, this script trains and saves a scikit-learn pipeline along with an evaluation of performance. If this solution was deployed in a mature cloud computing platform like Microsoft Azure, it may be preferable to save this model by registering it within that platform rather than storing the model object locally.
 - **Inference**: Using the saved model pipeline from the training step, this script applies the model to unseen inference data and saves its predictions. 
 
 These are seperated to allow for different scheduling frequency of training and inference in a production setting. Data preparation required on the raw input files is done within the Python scripts for now, but this would ideally be hosted within a data warehouse using dbt, PySpark or similar tools.
 
-Unit tests are also set up to check that custom functions within these codes provide expected outputs. They focus on the most critical custom functions required for training and inference. There is room for expansion here and this doesn't extend to externally sourced functions or integration testing, as the implementation of this solution is not determined. These use the native Python `unittest` package, and can be triggered from the root folder of the repo by running `python -m unittest`.
+Some early unit tests of individual functions and integration tests on a small data sample are set up in `./test`. They focus on the most critical custom functionality within the solution and could certainly be expanded both to be more robust and cover some of the less critical evaluation functions. These use the native Python `unittest` package, and can be triggered from the root folder of the repo by running `python -m unittest`.
 
 To fully utilise the solution presented within this repo:
 

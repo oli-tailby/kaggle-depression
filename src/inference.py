@@ -23,18 +23,20 @@ def model_inference(df, model, threshold):
     return y_prob, y_pred
 
 
-def main():
+def main(path='./resources'):
     mlflow.start_run()
 
     # import and prepare training data
-    df = import_prep_data('./resources/inference_data.csv')
+    df = import_prep_data(f'{path}/inputs/inference_data.csv')
 
     # load model object
-    with open('./resources/depression-model.pkl', 'rb') as f:
+    with open(f'{path}/outputs/depression-model.pkl', 'rb') as f:
         model = pickle.load(f)
 
     # run model inference and get predictions at specified threshold
     y_prob, y_pred = model_inference(df, model, threshold=0.4)
+
+    print(y_prob)
 
     # append predictions to input dataset and save
     y_pred_df = pd.concat([
@@ -45,7 +47,10 @@ def main():
         })
     ], axis=1)
 
-    y_pred_df.to_csv('./resources/output_inference.csv', index=False)
+    y_pred_df.to_csv(f'{path}/outputs/output_inference.csv', index=False)
+    mlflow.log_artifact(f'{path}/outputs/output_inference.csv')
+
+    mlflow.end_run()
 
 
 if __name__ == '__main__':

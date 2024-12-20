@@ -1,0 +1,3 @@
+Name,Age,Marital Status,Education Level,Number of Children,Smoking Status,Physical Activity Level,Employment Status,Income,Alcohol Consumption,Dietary Habits,Sleep Patterns,History of Mental Illness,History of Substance Abuse,Family History of Depression,Chronic Medical Conditions
+Patient One,19,Single,Associate Degree,0,Non-smoker,Sedentary,Unemployed,26265.67,High,Unhealthy,Fair,Yes,Yes,Yes,Yes
+Patient Two,67,Married,Bachelor's Degree,2,Non-smoker,Active,Employed,52000,Moderate,Moderate,Fair,No,No,No,No

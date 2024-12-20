@@ -30,7 +30,7 @@ FEATURES = [
     'Income Square Root', 
     # 'Divorced_Children',
     # 'Widowed_Children', 
-    'Unhealthy_Lifestyle_All',
+    # 'Unhealthy_Lifestyle_All',
     'Unhealthy_Lifestyle_Sum', 
     'Unemployed_ChronicCondition'    
 ]
@@ -72,12 +72,12 @@ def preprocessing(cat_cols, num_cols):
     return preprocessor
 
 
-def main():
+def main(testing_mode=False, path='./resources'):
 
     mlflow.start_run()
 
     # import and prep training data
-    df = import_prep_data('./resources/depression_data.csv')
+    df = import_prep_data(f'{path}/inputs/depression_data.csv')
 
     # split data into test and train, feature and target based on the provided variables
     X_train, X_test, y_train, y_test = data_split(df, FEATURES, TARGET, 0.2)
@@ -104,17 +104,20 @@ def main():
     )
 
     # fit and tune the model using a grid search approach
-    params = {
-        # 'model__penalty': [None,'l2'], 
-        'model__penalty': ['l2'], 
-        # 'model__C': [0.001, 0.01, 0.1, 1, 10, 100, 1000]
+    params_full = {
+        'model__penalty': [None,'l2'], 
+        'model__C': [0.001, 0.01, 0.1, 1, 10, 100, 1000]
+    }
+    params_basic = {
+        'model__penalty': ['l2'],
+        'model__C': [0.01, 1, 100]
     }
 
     search = GridSearchCV(
         estimator = pipe,
-        param_grid = params,
+        param_grid = params_basic if testing_mode else params_full,
         scoring = 'roc_auc',
-        cv = 2
+        cv = 2 if testing_mode else 5
     )
 
     search.fit(X_train, y_train)
@@ -124,12 +127,12 @@ def main():
     mlflow.log_metric('Test Score', search.score(X_test, y_test))
 
     cv_res = pd.DataFrame(search.cv_results_)
-    cv_res.to_csv('./resources/cv_results.csv', index=False)
-    mlflow.log_artifact('./resources/cv_results.csv')
+    cv_res.to_csv(f'{path}/evaluation/cv_results.csv', index=False)
+    mlflow.log_artifact(f'{path}/evaluation/cv_results.csv')
 
     # save the best performing model
     best_model = search.best_estimator_
-    with open('./resources/depression-model.pkl', 'wb') as f:
+    with open(f'{path}/outputs/depression-model.pkl', 'wb') as f:
         pickle.dump(best_model, f)
 
     # run inference on the test set for model evaluation
@@ -137,14 +140,14 @@ def main():
     y_prob = best_model.predict_proba(X_test)[:,1]
     y_pred = (y_prob >= threshold).astype('int')
 
-    imp_df = feat_importance(pd.get_dummies(df[FEATURES]).columns, best_model.named_steps['model'])
-    imp_df.to_csv('./resources/feature_importance.csv', index=False)
-    plot_importance(imp_df)
+    imp_df = feat_importance(list(pd.get_dummies(df[FEATURES]).columns), best_model.named_steps['model'])
+    imp_df.to_csv(f'{path}/evaluation/feature_importance.csv', index=False)
+    plot_importance(imp_df, f'{path}/evaluation/feature_importance.png')
 
     print(model_scores(y_test, y_pred))
-    roc_auc_plot(y_test, y_prob)
-    precision_recall_plot(y_test, y_prob)
-    confusion_matrix_plot(y_test, y_pred)
+    roc_auc_plot(y_test, y_prob, f'{path}/evaluation/roc_plot.png')
+    precision_recall_plot(y_test, y_prob, f'{path}/evaluation/precision_recall_plot.png')
+    confusion_matrix_plot(y_test, y_pred, f'{path}/evaluation/confusion_matrix.png')
 
     mlflow.end_run()
 

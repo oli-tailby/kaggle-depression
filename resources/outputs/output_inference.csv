@@ -1,0 +1,3 @@
+Name,Age,Marital Status,Education Level,Number of Children,Smoking Status,Physical Activity Level,Employment Status,Income,Alcohol Consumption,Dietary Habits,Sleep Patterns,History of Mental Illness,History of Substance Abuse,Family History of Depression,Chronic Medical Conditions,Has Children Flag,Income Square Root,Divorced_Children,Widowed_Children,Unhealthy_Lifestyle_All,Unhealthy_Lifestyle_Sum,Unemployed_ChronicCondition,prediction_prob,prediction
+Patient One,19,Single,Associate Degree,0,Non-smoker,Sedentary,Unemployed,26265.67,High,Unhealthy,Fair,1,1,1,1,0,162.06686891527212,0,0,0,3,1,0.4013813800261912,1
+Patient Two,67,Married,Bachelor's Degree,2,Non-smoker,Active,Employed,52000.0,Moderate,Moderate,Fair,0,0,0,0,1,228.0350850198276,0,0,0,0,0,0.24103172752356614,0

@@ -41,7 +41,7 @@ def feat_importance(features, model):
     return importance_df
 
 
-def plot_importance(importance_df, path='./resources/feature_importance.png'):
+def plot_importance(importance_df, path):
 
     top_importance_df = importance_df.head(8)
 
@@ -72,7 +72,8 @@ def model_scores(y_test, y_pred):
 
     return precision, recall, accuracy, f1, pred_positive
 
-def roc_auc_plot(y_test, y_prob, path='./resources/roc_plot.png'):
+
+def roc_auc_plot(y_test, y_prob, path='./resources/evaluation/roc_plot.png'):
     fpr, tpr, thresholds = roc_curve(y_test, y_prob)
     roc_auc = auc(fpr, tpr)
 
@@ -90,14 +91,15 @@ def roc_auc_plot(y_test, y_prob, path='./resources/roc_plot.png'):
     mlflow.log_artifact(path)
 
 
-def precision_recall_plot(y_test, y_prob, path='./resources/precision_recall_plot.png'):
+def precision_recall_plot(y_test, y_prob, path='./resources/evaluation/precision_recall_plot.png'):
     display = PrecisionRecallDisplay.from_predictions(y_test, y_prob, plot_chance_level=True)
     _ = display.ax_.set_title("2-class Precision-Recall curve")
 
     display.plot().figure_.savefig(path)
     mlflow.log_artifact(path)
 
-def confusion_matrix_plot(y_test, y_pred, path='./resources/confusion_matrix.png'):
+
+def confusion_matrix_plot(y_test, y_pred, path='./resources/evaluation/confusion_matrix.png'):
     conf_mat = confusion_matrix(y_test, y_pred)
 
     display = ConfusionMatrixDisplay(

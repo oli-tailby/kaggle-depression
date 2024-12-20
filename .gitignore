@@ -2,3 +2,5 @@
 mlruns
 src/__pycache__
 test/__pycache__
+test/resources/outputs/*
+test/resources/evaluation/*
