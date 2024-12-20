@@ -25,7 +25,7 @@ This project aims to predict mental health outcomes based on a collection of pat
 ```
 
 **resources** contains input and output files utilised or created by the modelling. <br /> 
-**src** contains python scripts to train the model, evaluate its performance and infer on unseen data. This folder also contains `src/depression-model.ipynb` which hosts exploratory data analysis and modelling, used to inform the model and features chosen as an initial solution to this project <br /> 
+**src** contains python scripts to train/tune the model, evaluate its performance and infer on unseen data. This folder also contains `src/depression-model.ipynb` which hosts exploratory data analysis and modelling, used to inform the model and features chosen as an initial solution to this project <br /> 
 **test** contains unit testing for the custom functions used within the deployable code. <br /> 
 **requirements.txt** contains python package requirements to run the solution.
 
@@ -34,6 +34,8 @@ This project aims to predict mental health outcomes based on a collection of pat
 Manual data exploration and analysis is undertaken in `depression-model.ipynb`. Here I have aimed to understand the distribution and characteristics of each features and how they correlate to each other and the target.
 
 For many of the features provided, there is a little correlation to the target, indicating model performance is unlikely to be strong. Unemployment and Income are the most obvious predictive features, with other factors that may be reasonably expected to be predictive such as family history and lifestyle indicators not highly correlated. 
+
+There is no missing or notable outlier data to draw attention to in this set, so I have not needed to apply any removals or imputation. 
 
 
 ## Modelling Approach and Feature Selection
