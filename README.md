@@ -67,9 +67,9 @@ To fully utilise the solution presented within this repo:
 #### Performance
 Model discrimination is currently fairly poor, with key metrics indicating performance that is better than baseline (an uninformed guess) but not strong. Threshold choice is particularly relevant here and would need to be selected based on the context of the application to balance recall and precision.
 
-![Confusion matrix showing reasonably strong recall but poor precision](https://github.com/oli-tailby/kaggle-depression/blob/main//resources/confusion_matrix.png?raw=true)
+![Confusion matrix showing reasonably strong recall but poor precision](https://github.com/oli-tailby/kaggle-depression/blob/main//resources/evaluation/confusion_matrix.png?raw=true)
 
-![ROC Curve showing AUC of approx 0.6](https://github.com/oli-tailby/kaggle-depression/blob/main//resources/roc_plot.png?raw=true)
+![ROC Curve showing AUC of approx 0.6](https://github.com/oli-tailby/kaggle-depression/blob/main//resources/evaluation/roc_plot.png?raw=true)
 
 
 Whether this can translate to usable insight would depend on the use case - we would not be able to use this model in its current iteration to confidently state whether a person has experienced a history of mental illness, but it may be able to be used in less deterministic contexts such as a factor in pricing for health and life insurance products.
